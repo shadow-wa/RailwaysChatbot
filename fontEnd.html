@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Railway Platform Translator</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* Your CSS styles go here */
+        /* Apply general styling to the body and heading */
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('/static/indianRailwaysWallpaper.jpg');
+    background-size: cover; /* or 'contain' based on your preference */
+    background-position: center top;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #333;
+    margin-top: 20px;
+}
+div{
+    background-color: #fff;
+}
+
+/* Style the language translation section */
+#language-select,
+#text-input,
+#translate-button,
+#translated-text {
+    margin: 10px;
+}
+
+#language-select, #text-input {
+    padding: 5px;
+    font-size: 16px;
+}
+
+#translate-button {
+    background-color: #0077cc;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#translate-button:hover {
+    background-color: #0055aa;
+}
+
+/* Style the train information section */
+#train-number,
+#get-train-info-button,
+#train-info {
+    margin: 10px;
+}
+
+#train-number, #get-train-info-button {
+    padding: 5px;
+    font-size: 16px;
+}
+
+#get-train-info-button {
+    background-color: #0077cc;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#get-train-info-button:hover {
+    background-color: #0055aa;
+}
+    </style>
+    
+</head>
+
+<body>
+    <h1>Empowering Multilingual Communication For Indian Railways</h1>
+
+    <label for="language-select">Select Language:</label>
+    <select id="language-select">
+        <option value="en">English</option>
+        <option value="fr">French</option>
+        <option value="hi">Hindi</option>
+        <option value="mr">Marathi</option>
+        <option value="ta">Tamil</option>
+        <!-- Add more language options as needed -->
+    </select>
+
+    <label for="text-input">Enter Text:</label>
+    <input type="text" id="text-input" placeholder="Type your message...">
+
+    <button id="translate-button" onclick="translateText()">Translate</button>
+
+    <h2>Translated Text:</h2>
+    <p id="translated-text">{{message}}</p>
+    <!-- <ul>
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul> -->
+
+    <h1>Train Information</h1>
+
+    <button id="get-train-info-button" onclick="chat()">Get Train Info</button>
+
+    <div id="train-info">
+        <!-- Display train information here -->
+    </div>
+</body>
+<script>
+    function translateText() {
+        var inputText = document.getElementById('text-input').value;
+        var selectedLanguage = document.getElementById('language-select').value;
+
+        fetch('/text_translate', {
+            method: 'POST',
+            body: JSON.stringify({ text_input: inputText, language_select: selectedLanguage }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('translated-text').innerText = data.translated_text;
+        });
+    }
+    function chat() {
+        var inputText = document.getElementById('text-input').value;
+        var selectedLanguage = document.getElementById('language-select').value;
+
+        fetch('/chat_bot', {
+            method: 'POST',
+            body: JSON.stringify({ text_input: inputText, language_select: selectedLanguage  }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("train-info").innerText = data.chatReply;
+        });
+    }
+
+
+</script>
+
+</html>
